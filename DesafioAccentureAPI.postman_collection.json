@@ -1,0 +1,284 @@
+{
+	"info": {
+		"_postman_id": "738eea6d-68df-4656-8473-28edf5e21d2b",
+		"name": "DesafioAccentureAPI",
+		"description": "O Desafio resume-se ao fluxo abaixo:\n\nCriar um usuário ([https://demoqa.com/Account/v1/User](https://demoqa.com/Account/v1/User))\n\nGerar um token de acesso ([https://demoqa.com/Account/v1/GenerateToken](https://demoqa.com/Account/v1/GenerateToken))\n\nConfirmar se o usuário criado está autorizado ([https://demoqa.com/Account/v1/Authorized](https://demoqa.com/Account/v1/Authorized))\n\nListar os livros disponíveis ([https://demoqa.com/BookStore/v1/Books](https://demoqa.com/BookStore/v1/Books))\n\nAlugar dois livros de livre escolha ([https://demoqa.com/BookStore/v1/Books](https://demoqa.com/BookStore/v1/Books))\n\nListar os detalhes do usuário com os livros escolhidos ([https://demoqa.com/Account/v1/User/{userID}](https://demoqa.com/Account/v1/User/%7BuserID%7D))",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6293123"
+	},
+	"item": [
+		{
+			"name": "Criar um usuário",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var userName = pm.variables.replaceIn(\"{{$randomFullName}}\")",
+							"pm.environment.set(\"userName\", userName)",
+							"",
+							"var password = pm.variables.replaceIn(\"123Mud@r\")",
+							"pm.environment.set(\"password\", password)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Validar Status Code",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"//Validar tipo de dado no response body",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Check tipo de dado do response body\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.userID).to.be.a(\"string\");",
+							"  pm.expect(jsonData.username).to.be.a(\"string\");",
+							"  pm.expect(jsonData.books).to.be.an(\"array\");",
+							"});",
+							"",
+							"//Guardar valor do user id",
+							"pm.environment.set(\"userID\", jsonData.userID);",
+							"",
+							"//Validar content type no header do response",
+							"pm.test(\"Check if Content-Type do header do response é application/json\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\": \"{{userName}}\",\n    \"password\": \"{{password}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Account/v1/User",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"User"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Gerar um token de acesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.environment.set(\"token\", jsonData.token);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userName\": \"{{userName}}\",\n  \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Account/v1/GenerateToken",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"GenerateToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirmar se o usuário criado está autorizado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Validar Status Code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is true\", function () {",
+							"    pm.response.to.have.body(\"true\")",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userName\": \"{{userName}}\",\n  \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Account/v1/Authorized",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"Authorized"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar os livros disponíveis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Guardar valor do user id",
+							"const jsonData = pm.response.json();",
+							"// garante que tem pelo menos 2 livros",
+							"if (jsonData.books && jsonData.books.length >= 2) {",
+							"    pm.environment.set(\"isbn1\", jsonData.books[0].isbn);",
+							"    pm.environment.set(\"isbn2\", jsonData.books[1].isbn);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/BookStore/v1/Books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"BookStore",
+						"v1",
+						"Books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alugar dois livros de livre escolha",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userId\": \"{{userID}}\",\n  \"collectionOfIsbns\": [\n    {\n      \"isbn\": \"{{isbn1}}\"\n    },\n    {\n      \"isbn\": \"{{isbn2}}\"\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/BookStore/v1/Books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"BookStore",
+						"v1",
+						"Books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar os detalhes do usuário com os livros escolhidos",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Account/v1/User/{{userID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"User",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
