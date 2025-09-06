@@ -14,18 +14,6 @@ O Desafio resume-se ao fluxo abaixo:
 
 ---
 
-## 🔧 Pré-requisitos
-
-- [Node.js](https://nodejs.org/en/) >= 18  
-- npm (vem com Node.js) 
-- Postman (opcional, apenas para editar/exportar collection e environment)
-
-Verifique a instalação:
-
-node -v
-npm -v
-
----
 ## 💻 Instalação das dependências
 
 Instale Newman e o reporter HTML Extra globalmente:
@@ -45,54 +33,6 @@ O comando acima irá:
 - Gerar um relatório HTML em reports/newman-report.html
 
 ---
-🏗️ Integração CI/CD (GitHub Actions)
-
-Workflow: .github/workflows/api-tests.yml
-
-Aciona em:
-
-Push para main
-
-Pull Requests
-
-Execução manual (workflow_dispatch)
-
-Gera relatórios:
-
-newman-report.html (HTML bonito)
-
-junit.xml (padrão JUnit)
-
-Injeta variáveis e segredos do GitHub Actions (Repository Secrets e Variables).
-
----
-🔑 Variáveis e Secrets
-Secrets (sensíveis):
-
-API_USER – Usuário da API
-
-API_PASSWORD – Senha da API
-
-API_TOKEN – Token de autenticação
-
-Variables (não sensíveis):
-
-BASE_URL – URL base da API (ex.: https://demoqa.com)
-
-Usados pelo Newman via --env-var para substituir placeholders da collection.
-
----
-📝 Adicionando novos testes
-
-Abra a collection no Postman e adicione requests ou scripts.
-
-Exporte novamente para JSON
-
-Commit e push; o workflow no GitHub Actions rodará automaticamente.
-
----
 📊 Visualização dos relatórios
 
-Localmente: abra reports/newman-report.html no navegador.
-
-No GitHub Actions: Actions → Workflow run → Artifacts → postman-reports → baixe newman-report.html.
+Localmente: abra newman-report.html no navegador.
