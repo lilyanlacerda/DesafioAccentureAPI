@@ -1,7 +1,6 @@
 # Desafio Accenture – Testes de API
 
-Este projeto contém testes automatizados de API usando **Postman** e **Newman**, com integração a **GitHub Actions** para execução contínua e geração de relatórios HTML e JUnit.
-
+Este projeto contém testes automatizados de API usando **Postman** e **Newman**.
 ---
 
 O Desafio resume-se ao fluxo abaixo:
