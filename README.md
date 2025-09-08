@@ -16,16 +16,18 @@ O Desafio resume-se ao fluxo abaixo:
 ## 💻 Instalação das dependências
 
 Instale Newman e o reporter HTML Extra globalmente:
-
+```
 npm install -g newman newman-reporter-htmlextra
-
+```
 ---
 🚀 Executando os testes localmente
+```
 mkdir -p reports
 newman run tests/postman/DesafioAccentureAPI.postman_collection.json \
   -e tests/postman/DesafioAccentureEnv.postman_environment.json \
   -r cli,htmlextra \
   --reporter-htmlextra-export reports/newman-report.html
+```
 
 O comando acima irá:
 - Executar toda a collection
